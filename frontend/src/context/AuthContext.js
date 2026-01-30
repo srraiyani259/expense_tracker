@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const checkUserLoggedIn = async () => {
-            const storedUser = JSON.parse(localStorage.getItem('user'));
+            const storedUser = JSON.parse(sessionStorage.getItem('user'));
 
             if (storedUser) {
                 setUser(storedUser);
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         const response = await api.post('/auth/register', userData);
 
         if (response.data) {
-            localStorage.setItem('user', JSON.stringify(response.data));
+            sessionStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);
         }
 
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
         if (response.data) {
             console.log('Login response user data:', response.data);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            sessionStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);
         }
 
@@ -44,14 +44,14 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         setUser(null);
     };
 
     const updateUser = (updatedUserData) => {
         // Merge existing user data with updates (preserve token, id etc if not passed)
         const newUser = { ...user, ...updatedUserData };
-        localStorage.setItem('user', JSON.stringify(newUser));
+        sessionStorage.setItem('user', JSON.stringify(newUser));
         setUser(newUser);
     };
 
