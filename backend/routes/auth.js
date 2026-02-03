@@ -118,6 +118,17 @@ router.put('/updatedetails', protect, upload.single('photo'), async (req, res) =
         mobile: req.body.mobile,
     };
 
+    if (req.body.email) {
+        // Check if email is being changed and if it's already taken
+        if (req.body.email !== req.user.email) {
+            const emailExists = await User.findOne({ email: req.body.email });
+            if (emailExists) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
+            fieldsToUpdate.email = req.body.email;
+        }
+    }
+
     if (req.file) {
         // Construct URL for the uploaded file
         // Assuming server runs on localhost:5000 or similar, but storing relative path is better for portability

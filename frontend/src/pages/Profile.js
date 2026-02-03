@@ -19,6 +19,7 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({
         name: '',
+        email: '',
         mobile: '',
         photoFile: null
     });
@@ -42,6 +43,7 @@ const Profile = () => {
             setProfile(res.data);
             setEditForm({
                 name: res.data.name,
+                email: res.data.email,
                 mobile: res.data.mobile || '',
                 photoFile: null
             });
@@ -56,6 +58,7 @@ const Profile = () => {
         setPreviewUrl('');
         setEditForm({
             name: profile.name,
+            email: profile.email,
             mobile: profile.mobile || '',
             photoFile: null
         });
@@ -74,6 +77,7 @@ const Profile = () => {
 
         const formData = new FormData();
         formData.append('name', editForm.name);
+        formData.append('email', editForm.email);
         formData.append('mobile', editForm.mobile);
         if (editForm.photoFile) {
             formData.append('photo', editForm.photoFile);
@@ -249,6 +253,16 @@ const Profile = () => {
                                         className='form-control'
                                         value={editForm.name}
                                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className='form-group'>
+                                    <label>Email Address</label>
+                                    <input
+                                        type="email"
+                                        className='form-control'
+                                        value={editForm.email}
+                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                                         required
                                     />
                                 </div>
