@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { FaMoneyBillWave, FaChartLine, FaList, FaWallet, FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { FaMoneyBillWave, FaChartLine, FaList, FaWallet, FaArrowUp, FaArrowDown, FaFilePdf } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -47,6 +49,34 @@ const Dashboard = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+
+        doc.text("Transaction History", 14, 15);
+
+        const tableColumn = ["Date", "Title", "Amount", "Type", "Category"];
+        const tableRows = [];
+
+        transactions.forEach(txn => {
+            const transactionData = [
+                moment(txn.date).format('DD/MM/YYYY'),
+                txn.title,
+                `Rs. ${txn.amount.toFixed(2)}`,
+                txn.type,
+                txn.categoryName || txn.category || 'N/A'
+            ];
+            tableRows.push(transactionData);
+        });
+
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 20
+        });
+
+        doc.save(`transactions_${moment().format('YYYY-MM-DD')}.pdf`);
+    };
 
     // --- Chart Data Processing ---
 
@@ -217,6 +247,17 @@ const Dashboard = () => {
                 }} title="Add Expense">
                     -
                 </Link>
+                <button onClick={downloadPDF} className="btn" style={{
+                    width: '60px', height: '60px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.5rem', boxShadow: '0 10px 25px rgba(52, 152, 219, 0.4)',
+                    backgroundColor: '#3498db',
+                    color: 'white',
+                    border: 'none',
+                    cursor: 'pointer'
+                }} title="Download PDF">
+                    <FaFilePdf />
+                </button>
             </div>
         </div>
     );
