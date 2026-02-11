@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
+import { BACKEND_URL } from '../services/api';
 import { FaWallet, FaSignOutAlt, FaUserCircle, FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
@@ -38,7 +39,7 @@ const Navbar = () => {
                                         border: '2px solid white', overflow: 'hidden'
                                     }}>
                                         {user.photo ? (
-                                            <img src={`http://localhost:5000/${user.photo.replace(/\\/g, '/')}`} alt="User" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <img src={`${BACKEND_URL}/${user.photo.replace(/\\/g, '/')}`} alt="User" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         ) : (
                                             <FaUser />
                                         )}

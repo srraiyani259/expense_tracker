@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { BACKEND_URL } from '../services/api';
 import { toast } from 'react-toastify';
 import AuthContext from '../context/AuthContext';
 import { FaUser, FaEnvelope, FaPhone, FaCamera, FaLock, FaCheck, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -153,7 +153,7 @@ const Profile = () => {
         // Normalize path separators for Windows
         const normalizedPath = photoPath.replace(/\\/g, '/');
         // Check if path already contains 'uploads/' to avoid doubling if needed, though backend returns 'uploads/filename'
-        return `http://localhost:5000/${normalizedPath}`;
+        return `${BACKEND_URL}/${normalizedPath}`;
     };
 
     return (
